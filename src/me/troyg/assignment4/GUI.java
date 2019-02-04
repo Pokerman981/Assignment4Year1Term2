@@ -3,12 +3,20 @@ package me.troyg.assignment4;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.Scanner;
 
 public class GUI {
     public File inFile;
     public File outFile;
-    public Path path;
+    public Path parentPath;
+
+    public PrintWriter printWriter;
+    public int decimalFormat;
+    public int columnAmount;
+    public Scanner scanner;
 
     public static JFrame jFrame;
 
@@ -23,10 +31,49 @@ public class GUI {
         openButton.addActionListener(e -> {
             int option = jFileChooser.showOpenDialog(jFrame);
             if (option == JFileChooser.APPROVE_OPTION) {
-                openFileLabel.setText(jFileChooser.getSelectedFile().getName());
+                inFile = jFileChooser.getSelectedFile();
+                parentPath = jFileChooser.getSelectedFile().getParentFile().toPath();
+
+                openFileLabel.setText(inFile.getName());
             }
         });
 
+        analyzeButton.addActionListener(e -> {
+            try {
+                scanner = new Scanner(inFile);
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+            outFile = new File(JOptionPane.showInputDialog("Please enter the name of the output file."));
+            decimalFormat = Integer.valueOf(JOptionPane.showInputDialog("Please input the precision. EX: 2"));
+            columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
+
+            if (outFile.exists()) {
+                JOptionPane.showMessageDialog(null, "The specified output file already exists. Please try again.");
+                return;
+            }
+
+            try {
+                printWriter = new PrintWriter(outFile);
+            } catch (FileNotFoundException e2) {
+                e2.printStackTrace();
+            }
+
+            int column = 0;
+            while (scanner.hasNext()) {
+                float f = scanner.nextFloat();
+
+                if (column == columnAmount) {
+                    printWriter.println("");
+                    column = 0;
+                }
+                printWriter.format("%." + decimalFormat + "f\t\t", f);
+                column++;
+            }
+
+            printWriter.close();
+        });
     }
 
     {

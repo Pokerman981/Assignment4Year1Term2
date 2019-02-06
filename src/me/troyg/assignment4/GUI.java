@@ -2,9 +2,7 @@ package me.troyg.assignment4;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.Scanner;
 
@@ -16,6 +14,7 @@ public class GUI {
     public PrintWriter printWriter;
     public int decimalFormat;
     public int columnAmount;
+    public int fieldWIdth;
     public Scanner scanner;
 
     public static JFrame jFrame;
@@ -27,7 +26,7 @@ public class GUI {
     private JButton openButton;
     private JLabel openFileLabel;
 
-    GUI() {
+    public GUI() {
         openButton.addActionListener(e -> {
             int option = jFileChooser.showOpenDialog(jFrame);
             if (option == JFileChooser.APPROVE_OPTION) {
@@ -48,6 +47,7 @@ public class GUI {
             outFile = new File(JOptionPane.showInputDialog("Please enter the name of the output file."));
             decimalFormat = Integer.valueOf(JOptionPane.showInputDialog("Please input the precision. EX: 2"));
             columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
+            fieldWIdth = Integer.valueOf(JOptionPane.showInputDialog("How big do you want each field?"));
 
             if (outFile.exists()) {
                 JOptionPane.showMessageDialog(null, "The specified output file already exists. Please try again.");
@@ -61,8 +61,16 @@ public class GUI {
             }
 
             int column = 0;
+
+
             while (scanner.hasNext()) {
                 float f = scanner.nextFloat();
+                int numSize = Float.toString(f).replaceAll("\\.", "").length();
+                int decimalSize = Float.toString(f).split("\\.")[1].length();
+
+                if (numSize > fieldWIdth) {
+                    System.out.println(f + " is bigger then " + fieldWIdth + "in digits.");
+                }
 
                 if (column == columnAmount) {
                     printWriter.println("");

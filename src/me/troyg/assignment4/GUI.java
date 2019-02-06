@@ -75,15 +75,11 @@ public class GUI {
 
                 if (numSize > fieldWIdth) {
                     int removeAmount = numSize - fieldWIdth;
-                    if (removeAmount > decimalSize) {//Just remove all decimals
-                        printWriter.format("%d\t\t", Math.round(f));
+                    if (decimalSize < removeAmount) { //Just remove all
+                        printWriter.format(Math.round(f) + "\t\t", f);
                     } else {
-                        int amount = decimalSize - removeAmount;
-                        if (amount < decimalSize) {
-                            printWriter.format("%." + decimalFormat + "f\t\t", f);
-                        } else {
-                            printWriter.format("%." + amount + "f\t\t", f);
-                        }
+                        int d = decimalSize - removeAmount;
+                        printWriter.format("%." + d + "f\t\t", f);
                     }
                 } else {
                     printWriter.format("%." + decimalFormat + "f\t\t", f);

@@ -54,29 +54,40 @@ public class GUI {
                 return;
             }
 
-            try {
+            try { //Creating the file
                 printWriter = new PrintWriter(outFile);
             } catch (FileNotFoundException e2) {
                 e2.printStackTrace();
             }
-
             int column = 0;
 
 
             while (scanner.hasNext()) {
                 float f = scanner.nextFloat();
                 int numSize = Float.toString(f).replaceAll("\\.", "").length();
+                int frontNumberSize = Float.toString(f).split("\\.")[0].length();
                 int decimalSize = Float.toString(f).split("\\.")[1].length();
-
-                if (numSize > fieldWIdth) {
-                    System.out.println(f + " is bigger then " + fieldWIdth + "in digits.");
-                }
 
                 if (column == columnAmount) {
                     printWriter.println("");
                     column = 0;
                 }
-                printWriter.format("%." + decimalFormat + "f\t\t", f);
+
+                if (numSize > fieldWIdth) {
+                    int removeAmount = numSize - fieldWIdth;
+                    if (removeAmount > decimalSize) {//Just remove all decimals
+                        printWriter.format("%d\t\t", Math.round(f));
+                    } else {
+                        int amount = decimalSize - removeAmount;
+                        if (amount < decimalSize) {
+                            printWriter.format("%." + decimalFormat + "f\t\t", f);
+                        } else {
+                            printWriter.format("%." + amount + "f\t\t", f);
+                        }
+                    }
+                } else {
+                    printWriter.format("%." + decimalFormat + "f\t\t", f);
+                }
                 column++;
             }
 

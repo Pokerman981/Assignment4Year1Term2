@@ -14,7 +14,7 @@ public class GUI {
     public PrintWriter printWriter;
     public int decimalFormat;
     public int columnAmount;
-    public int fieldWIdth;
+    public int fieldWidth;
     public Scanner scanner;
 
     public static JFrame jFrame;
@@ -47,7 +47,7 @@ public class GUI {
             outFile = new File(JOptionPane.showInputDialog("Please enter the name of the output file."));
             decimalFormat = Integer.valueOf(JOptionPane.showInputDialog("Please input the precision. EX: 2"));
             columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
-            fieldWIdth = Integer.valueOf(JOptionPane.showInputDialog("How big do you want each field?"));
+            fieldWidth = Integer.valueOf(JOptionPane.showInputDialog("How big do you want each field?"));
 
             if (outFile.exists()) {
                 JOptionPane.showMessageDialog(null, "The specified output file already exists. Please try again.");
@@ -73,13 +73,18 @@ public class GUI {
                     column = 0;
                 }
 
-                if (numSize > fieldWIdth) {
-                    int removeAmount = numSize - fieldWIdth;
+                if (numSize > fieldWidth) {
+                    int removeAmount = numSize - fieldWidth;
                     if (decimalSize < removeAmount) { //Just remove all
                         printWriter.format(Math.round(f) + "\t\t", f);
                     } else {
                         int d = decimalSize - removeAmount;
-                        printWriter.format("%." + d + "f\t\t", f);
+                        if (d < decimalSize) {
+                            printWriter.format("%." + decimalFormat + "f\t\t", f);
+
+                        } else {
+                            printWriter.format("%." + d + "f\t\t", f);
+                        }
                     }
                 } else {
                     printWriter.format("%." + decimalFormat + "f\t\t", f);

@@ -49,11 +49,12 @@ public class GUI {
             columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
             fieldWidth = Integer.valueOf(JOptionPane.showInputDialog("How big do you want each field?"));
 
-            if (outFile.exists()) {
+            if (outFile.exists())
+            {
                 JOptionPane.showMessageDialog(null, "The specified output file already exists. Please try again.");
                 return;
             }
-
+/* */
             try { //Creating the file
                 printWriter = new PrintWriter(outFile);
             } catch (FileNotFoundException e2) {

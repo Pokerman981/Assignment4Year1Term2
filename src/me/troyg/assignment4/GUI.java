@@ -19,7 +19,7 @@ public class GUI {
     public int columnAmount;
     public int fieldWidth;
     public Scanner scanner;
-    public DecimalFormat formatter;
+    public DecimalFormat formatter = new DecimalFormat();
     public String pattern = "0.";
 
     public static JFrame jFrame;
@@ -37,7 +37,6 @@ public class GUI {
             if (option == JFileChooser.APPROVE_OPTION) {
                 inFile = jFileChooser.getSelectedFile();
                 parentPath = jFileChooser.getSelectedFile().getParentFile().toPath();
-
                 openFileLabel.setText(inFile.getName());
             }
         });
@@ -59,6 +58,7 @@ public class GUI {
             for (int i=0; i < decimalFormat; i++) {
                 pattern = pattern + "0";
             }
+            formatter.applyPattern(pattern);
 
             columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
 
@@ -73,11 +73,8 @@ public class GUI {
             }
             int column = 0;
 
-
             while (scanner.hasNext()) {
                 float d = scanner.nextFloat();
-                formatter = new DecimalFormat();
-                formatter.applyPattern(pattern);
                 float formattedFloat = Float.valueOf(formatter.format(d));
                 if (column == columnAmount) {
                     printWriter.println("");

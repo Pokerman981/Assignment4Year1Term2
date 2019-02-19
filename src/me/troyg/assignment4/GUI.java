@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class GUI {
@@ -16,6 +18,8 @@ public class GUI {
     public int columnAmount;
     public int fieldWidth;
     public Scanner scanner;
+    public DecimalFormat formatter;
+    public String pattern = "0.";
 
     public static JFrame jFrame;
 
@@ -45,14 +49,21 @@ public class GUI {
             }
 
             outFile = new File(JOptionPane.showInputDialog("Please enter the name of the output file."));
-            decimalFormat = Integer.valueOf(JOptionPane.showInputDialog("Please input the precision. EX: 2"));
-            columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
-            fieldWidth = Integer.valueOf(JOptionPane.showInputDialog("How big do you want each field?"));
-
             if (outFile.exists()) {
                 JOptionPane.showMessageDialog(null, "The specified output file already exists. Please try again.");
                 return;
             }
+
+            decimalFormat = Integer.valueOf(JOptionPane.showInputDialog("Please input the precision. EX: 2"));
+            for (int i=0; i < decimalFormat; i++) {
+                pattern = pattern + "0";
+            }
+
+            columnAmount = Integer.valueOf(JOptionPane.showInputDialog("How many columns do you want?"));
+
+            fieldWidth = Integer.valueOf(JOptionPane.showInputDialog("How big do you want each field?"));
+
+
 
             try { //Creating the file
                 printWriter = new PrintWriter(outFile);
@@ -63,32 +74,21 @@ public class GUI {
 
 
             while (scanner.hasNext()) {
-                float f = scanner.nextFloat();
-                int numSize = Float.toString(f).replaceAll("\\.", "").length();
-                int frontNumberSize = Float.toString(f).split("\\.")[0].length();
-                int decimalSize = Float.toString(f).split("\\.")[1].length();
-
+                float d = scanner.nextFloat();
+                int frontNumberSize = Double.toString(d).split("\\.")[0].length();
+                formatter = new DecimalFormat();
+                formatter.setMaximumIntegerDigits(frontNumberSize);
+                formatter.setMinimumIntegerDigits(frontNumberSize);
+                formatter.applyPattern(pattern);
+                float formattedFloat = Float.valueOf(formatter.format(d));
                 if (column == columnAmount) {
                     printWriter.println("");
                     column = 0;
                 }
 
-                if (numSize > fieldWidth) {
-                    int removeAmount = numSize - fieldWidth;
-                    if (decimalSize < removeAmount) { //Just remove all
-                        printWriter.format(Math.round(f) + "\t\t", f);
-                    } else {
-                        int d = decimalSize - removeAmount;
-                        if (d < decimalSize) {
-                            printWriter.format("%." + decimalFormat + "f\t\t", f);
+                printWriter.format("%-"+ fieldWidth + "s", formattedFloat);
 
-                        } else {
-                            printWriter.format("%." + d + "f\t\t", f);
-                        }
-                    }
-                } else {
-                    printWriter.format("%." + decimalFormat + "f\t\t", f);
-                }
+
                 column++;
             }
 
@@ -190,3 +190,20 @@ public class GUI {
     }
 
 }
+
+/*                if (numSize > fieldWidth) {
+                    int removeAmount = numSize - fieldWidth;
+                    if (decimalSize < removeAmount) { //Just remove all
+                        printWriter.format(Math.round(f) + "\t\t", f);
+                    } else {
+                        int d = decimalSize - removeAmount;
+                        if (d < decimalSize) {
+                            printWriter.format("%." + decimalFormat + "f\t\t", f);
+
+                        } else {
+                            printWriter.format("%." + d + "f\t\t", f);
+                        }
+                    }
+                } else {
+                    printWriter.format("%." + decimalFormat + "f\t\t", f);
+                }*/

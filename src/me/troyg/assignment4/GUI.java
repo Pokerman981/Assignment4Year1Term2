@@ -86,7 +86,7 @@ public class GUI {
                     column = 0;
                 }
 
-                printWriter.format("%-"+ fieldWidth + "s", formattedFloat);
+                printWriter.format("%-"+ (fieldWidth-1) + "s ", formattedFloat);
 
 
                 column++;

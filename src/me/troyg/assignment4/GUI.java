@@ -75,10 +75,7 @@ public class GUI {
 
             while (scanner.hasNext()) {
                 float d = scanner.nextFloat();
-                int frontNumberSize = Double.toString(d).split("\\.")[0].length();
                 formatter = new DecimalFormat();
-                formatter.setMaximumIntegerDigits(frontNumberSize);
-                formatter.setMinimumIntegerDigits(frontNumberSize);
                 formatter.applyPattern(pattern);
                 float formattedFloat = Float.valueOf(formatter.format(d));
                 if (column == columnAmount) {
@@ -87,8 +84,6 @@ public class GUI {
                 }
 
                 printWriter.format("%-"+ (fieldWidth-1) + "s ", formattedFloat);
-
-
                 column++;
             }
 

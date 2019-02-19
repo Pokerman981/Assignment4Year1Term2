@@ -2,10 +2,11 @@ package me.troyg.assignment4;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class GUI {
@@ -185,20 +186,3 @@ public class GUI {
     }
 
 }
-
-/*                if (numSize > fieldWidth) {
-                    int removeAmount = numSize - fieldWidth;
-                    if (decimalSize < removeAmount) { //Just remove all
-                        printWriter.format(Math.round(f) + "\t\t", f);
-                    } else {
-                        int d = decimalSize - removeAmount;
-                        if (d < decimalSize) {
-                            printWriter.format("%." + decimalFormat + "f\t\t", f);
-
-                        } else {
-                            printWriter.format("%." + d + "f\t\t", f);
-                        }
-                    }
-                } else {
-                    printWriter.format("%." + decimalFormat + "f\t\t", f);
-                }*/
